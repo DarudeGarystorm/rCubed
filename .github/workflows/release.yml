@@ -1,5 +1,8 @@
 name: Release
 
+permissions:
+    contents: write
+
 on:
     push:
         tags:
@@ -25,6 +28,8 @@ jobs:
                   MESSAGE
     build:
         needs: skip
+        outputs:
+            version: ${{ steps.versionNumber.outputs.tag }}
         runs-on: ${{ matrix.os }}
         strategy:
             matrix:
@@ -64,12 +69,12 @@ jobs:
               if: startsWith(github.ref, 'refs/tags')
               shell: bash
               id: versionNumber
-              run: echo ::set-output name=tag::$(echo ${GITHUB_REF/refs\/tags\/v/} | sed -r 's/([0-9]+\.[0-9]+\.[0-9]+)-.*/\1/' )
+              run: echo "tag=$(echo ${GITHUB_REF/refs\/tags\/v/} | sed -E 's/([0-9]+\.[0-9]+\.[0-9]+)-.*/\1/')" >> "$GITHUB_OUTPUT"
 
             - name: Generate Date
               shell: bash
               id: datestamp
-              run: echo ::set-output name=date::$(date +'%Y-%m-%d')
+              run: echo "date=$(date +'%Y-%m-%d')" >> "$GITHUB_OUTPUT"
 
             # Set build version.
             - name: Token Replace in asconfig
@@ -112,6 +117,13 @@ jobs:
               if: matrix.os == 'windows-latest'
               shell: cmd
               run: ${{ github.workspace }}\node_modules\.bin\asconfigc.cmd --sdk ${{ github.workspace }}\airsdk --project asconfig.hybrid.json --verbose
+
+            - name: Share release SWF for Mac packaging
+              uses: actions/upload-artifact@v4
+              with:
+                  name: macos-swf
+                  path: bin/release/R3Air.swf
+                  if-no-files-found: error
 
             ##########################################################################################
             # Package Version 64-bit
@@ -197,3 +209,13 @@ jobs:
                   asset_path: ${{ github.workspace }}\bundles\Hybrid.zip
                   asset_name: rCubed-0.0.8-${{ steps.versionNumber.outputs.tag }}-Hybrid-32bit.zip
                   asset_content_type: application/executable
+
+    macos:
+        needs: build
+        uses: ./.github/workflows/macos-package.yml
+        with:
+            version: ${{ needs.build.outputs.version }}
+            swf-artifact: macos-swf
+            release-tag: v${{ needs.build.outputs.version }}
+        secrets:
+            AIR_SDK_LICENSE_FILE: ${{ secrets.AIR_SDK_LICENSE_FILE }}

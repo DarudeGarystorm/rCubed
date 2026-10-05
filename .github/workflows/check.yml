@@ -3,8 +3,8 @@ name: Check
 on:
     push:
         branches:
-            - main
-            - feat/workflow
+            - "**"
+    workflow_dispatch:
     pull_request:
         branches:
             - main
@@ -68,3 +68,21 @@ jobs:
               if: matrix.os == 'windows-latest'
               shell: cmd
               run: ${{ github.workspace }}\node_modules\.bin\asconfigc.cmd --sdk ${{ github.workspace }}\airsdk --project asconfig.release.json --debug=false --verbose
+
+            - name: Share development SWF for Mac packaging
+              uses: actions/upload-artifact@v4
+              with:
+                  name: macos-swf
+                  path: bin/develop/R3Air.swf
+                  if-no-files-found: error
+
+    macos:
+        needs: build
+        uses: ./.github/workflows/macos-package.yml
+        permissions:
+            contents: read
+        with:
+            version: "0.0.0"
+            swf-artifact: macos-swf
+        secrets:
+            AIR_SDK_LICENSE_FILE: ${{ secrets.AIR_SDK_LICENSE_FILE }}

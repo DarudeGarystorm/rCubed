@@ -1,5 +1,8 @@
 name: Manual Tag Build
 
+permissions:
+    contents: write
+
 on:
     workflow_dispatch:
         inputs:
@@ -47,7 +50,7 @@ jobs:
             - name: Generate Date
               shell: bash
               id: datestamp
-              run: echo ::set-output name=date::$(date +'%Y-%m-%d')
+              run: echo "date=$(date +'%Y-%m-%d')" >> "$GITHUB_OUTPUT"
 
             # Set build version.
             - name: Token Replace in asconfig
@@ -90,6 +93,13 @@ jobs:
               if: matrix.os == 'windows-latest'
               shell: cmd
               run: ${{ github.workspace }}\node_modules\.bin\asconfigc.cmd --sdk ${{ github.workspace }}\airsdk --project asconfig.hybrid.json --verbose
+
+            - name: Share release SWF for Mac packaging
+              uses: actions/upload-artifact@v4
+              with:
+                  name: macos-swf
+                  path: bin/release/R3Air.swf
+                  if-no-files-found: error
 
             ##########################################################################################
             # Package Version 64-bit
@@ -175,3 +185,13 @@ jobs:
                   asset_path: ${{ github.workspace }}\bundles\Hybrid.zip
                   asset_name: rCubed-0.0.8-${{ inputs.version }}-Hybrid-32bit.zip
                   asset_content_type: application/executable
+
+    macos:
+        needs: build
+        uses: ./.github/workflows/macos-package.yml
+        with:
+            version: ${{ inputs.version }}
+            swf-artifact: macos-swf
+            release-tag: v${{ inputs.version }}-M
+        secrets:
+            AIR_SDK_LICENSE_FILE: ${{ secrets.AIR_SDK_LICENSE_FILE }}

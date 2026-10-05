@@ -51,7 +51,7 @@ R^3 is the third and latest game engine for **[Flash Flash Revolution](http://ww
 
 ## Getting Started
 
-These instructions will get you a copy of the R^3 Engine up and running on **Windows** for development and testing purposes (Mac and Linux are not supported).
+These development instructions cover **Windows**. For universal macOS packages supporting Intel and Apple Silicon, see the [macOS build and packaging guide](docs/macos.md). Linux is not supported.
 
 ### Prerequisites
 
