@@ -2,8 +2,8 @@
 set -euo pipefail
 
 # A fixed SDK keeps the runtime identical in local builds and CI.
-sdk_version=51.1.3.5
-sdk_sha256=1f259b07546fc9d9a5bb737e8b404a5db96391898b6058c452fd75ba566f5e7f
+sdk_version=51.4.1.1
+sdk_sha256=855dd09ed31e368ac604ef187801981e2e280df7edd12416d422b11a24911269
 sdk_dir="${1:?Usage: setup-macos-sdk.sh SDK_DIRECTORY}"
 
 if [[ -f "$sdk_dir/.r3-sdk-$sdk_sha256" ]]; then

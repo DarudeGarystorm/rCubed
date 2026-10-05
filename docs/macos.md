@@ -6,7 +6,7 @@ Packages currently use ad hoc code signatures. Downloaded applications may requi
 
 ## Build and release workflow
 
-The Windows build continues to compile the fonts and platform-independent game SWF using AIR 32. The Mac workflow packages that same SWF with HARMAN AIR SDK **51.1.3.5**, which provides a universal runtime. The SDK archive is pinned by version and SHA-256 checksum.
+The Windows build continues to compile the fonts and platform-independent game SWF using AIR 32. The Mac workflow packages that same SWF with HARMAN AIR SDK **51.4.1.1**, which provides a universal runtime. The SDK archive is pinned by version and SHA-256 checksum.
 
 The shared `macos-package.yml` workflow:
 

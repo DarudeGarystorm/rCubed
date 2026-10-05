@@ -26,7 +26,7 @@ jobs:
               with:
                   lfs: true
             - name: Set SDK location
-              run: echo "AIR_SDK=$RUNNER_TEMP/air-sdk-51.1.3.5" >> "$GITHUB_ENV"
+              run: echo "AIR_SDK=$RUNNER_TEMP/air-sdk-51.4.1.1" >> "$GITHUB_ENV"
             - uses: actions/setup-java@v4
               with:
                   distribution: temurin
@@ -37,8 +37,8 @@ jobs:
                   path: macos-input
             - uses: actions/cache@v4
               with:
-                  path: ${{ runner.temp }}/air-sdk-51.1.3.5
-                  key: macos-air-sdk-51.1.3.5-1f259b07546fc9d9a5bb737e8b404a5db96391898b6058c452fd75ba566f5e7f
+                  path: ${{ runner.temp }}/air-sdk-51.4.1.1
+                  key: macos-air-sdk-51.4.1.1-855dd09ed31e368ac604ef187801981e2e280df7edd12416d422b11a24911269
             - name: Set up universal Mac AIR SDK
               run: bash scripts/setup-macos-sdk.sh "$AIR_SDK"
             - name: Install optional AIR SDK license
