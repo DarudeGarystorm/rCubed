@@ -24,15 +24,15 @@ jobs:
                   lfs: true
             - name: Set SDK location
               run: echo "AIR_SDK=$RUNNER_TEMP/air-sdk-51.4.1.1" >> "$GITHUB_ENV"
-            - uses: actions/setup-java@v4
+            - uses: actions/setup-java@v6.0.1
               with:
                   distribution: temurin
                   java-version: "17"
-            - uses: actions/download-artifact@v4
+            - uses: actions/download-artifact@v8.0.1
               with:
                   name: ${{ inputs.swf-artifact }}
                   path: macos-input
-            - uses: actions/cache@v4
+            - uses: actions/cache@v6.1.0
               with:
                   path: ${{ runner.temp }}/air-sdk-51.4.1.1
                   key: macos-air-sdk-51.4.1.1-855dd09ed31e368ac604ef187801981e2e280df7edd12416d422b11a24911269
@@ -50,7 +50,7 @@ jobs:
               env:
                   VERSION: ${{ inputs.version }}
               run: bash scripts/package-macos.sh "$AIR_SDK" macos-input/R3Air.swf "$VERSION" macos-output
-            - uses: actions/upload-artifact@v4
+            - uses: actions/upload-artifact@v7.0.1
               with:
                   name: macos-universal
                   path: macos-output/*.zip
@@ -67,7 +67,7 @@ jobs:
             contents: read
         steps:
             - uses: actions/checkout@v5.0.0
-            - uses: actions/download-artifact@v4
+            - uses: actions/download-artifact@v8.0.1
               with:
                   name: macos-universal
                   path: macos-output

@@ -70,7 +70,7 @@ jobs:
               run: ${{ github.workspace }}\node_modules\.bin\asconfigc.cmd --sdk ${{ github.workspace }}\airsdk --project asconfig.release.json --debug=false --verbose
 
             - name: Share development SWF for Mac packaging
-              uses: actions/upload-artifact@v4
+              uses: actions/upload-artifact@v7.0.1
               with:
                   name: macos-swf
                   path: bin/develop/R3Air.swf
