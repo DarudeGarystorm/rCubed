@@ -4,7 +4,7 @@ set -euo pipefail
 app_dir="${1:?Usage: smoke-test-macos.sh APPLICATION_BUNDLE}"
 executable="$app_dir/Contents/MacOS/R3"
 architecture="$(uname -m)"
-lipo -verify_arch "$architecture" "$executable"
+lipo "$executable" -verify_arch "$architecture"
 codesign --verify --deep --strict "$app_dir"
 
 log_file="$(mktemp -t r3-macos-launch)"

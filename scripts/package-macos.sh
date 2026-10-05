@@ -46,8 +46,8 @@ certificate_password="$(openssl rand -hex 16)"
     -C "$stage_dir" R3Air.swf data changelog.txt
 
 # Refuse to label an Intel-only runtime as universal.
-lipo -verify_arch x86_64 arm64 "$app_dir/Contents/MacOS/R3"
-lipo -verify_arch x86_64 arm64 "$app_dir/Contents/Frameworks/Adobe AIR.framework/Adobe AIR"
+lipo "$app_dir/Contents/MacOS/R3" -verify_arch x86_64 arm64
+lipo "$app_dir/Contents/Frameworks/Adobe AIR.framework/Adobe AIR" -verify_arch x86_64 arm64
 
 # Apple Silicon requires signed executables. An ad hoc signature works for
 # testing; trusted distribution still needs a Developer ID and notarization.
