@@ -14,9 +14,8 @@ The shared `macos-package.yml` workflow:
 2. Packages the game, icons and changelog into an application bundle.
 3. Verifies that both the launcher and AIR runtime contain Intel and Apple Silicon code, signs the bundle and checks its signature.
 4. Starts the native application for 15 seconds on both `macos-15-intel` and `macos-15` (Apple Silicon).
-5. Adds the Mac ZIP to the existing draft release after both startup checks pass.
 
-Both tag releases and manual releases call this workflow. The Check workflow also builds the Mac package on branch pushes and pull requests, without creating a release.
+Both tag releases and manual releases call this workflow, then add the Mac ZIP to their existing draft release after both startup checks pass. The shared packaging workflow uses read-only repository permissions. The Check workflow also builds the Mac package on branch pushes and pull requests, without creating a release.
 
 The startup checks catch missing runtimes, invalid signatures and early process exits. They do not replace playtesting, login checks or latency measurements. CI covers macOS 15 on both architectures.
 

@@ -216,6 +216,20 @@ jobs:
         with:
             version: ${{ needs.build.outputs.version }}
             swf-artifact: macos-swf
-            release-tag: v${{ needs.build.outputs.version }}
         secrets:
             AIR_SDK_LICENSE_FILE: ${{ secrets.AIR_SDK_LICENSE_FILE }}
+
+    upload-macos:
+        needs: [build, macos]
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/download-artifact@v4
+              with:
+                  name: macos-universal
+                  path: macos-output
+            - name: Attach verified Mac package to the existing draft release
+              env:
+                  GH_TOKEN: ${{ github.token }}
+                  GH_REPO: ${{ github.repository }}
+                  RELEASE_TAG: v${{ needs.build.outputs.version }}
+              run: gh release upload "$RELEASE_TAG" macos-output/*.zip --clobber
